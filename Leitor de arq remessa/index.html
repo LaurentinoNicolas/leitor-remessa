@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 class="text-center pt-3 text-uppercase">Leitor de remessa de retorno</h1>
+    <div class="container">
+        <div class="form-group">
+            <textarea class="form-control mt-4" id="remessa" rows="8" placeholder="Deposite aqui sua remessa"onkeyup="mostrarResultado()"></textarea>
+        </div>
+        <h5 class="text-center pt-3">RESULTADO</h5>
+        <div class="row">
+            <div class="col-6">
+                <label for="desconto">Nome da empresa</label>
+                <input type="text" class="form-control" id="empresa" maxlength="30" placeholder="Nome da empresa">            
+            </div>
+            <div class="col-3">
+                <label for="nossoNumero">Identificação do boleto</label>
+                <input type="text" class="form-control" id="nossoNumero" placeholder="Identificação do boleto">            
+            </div> 
+            <div class="col-3"></div>
+            
+            <div class="col-4">
+                <label for="valor">Valor</label>
+                <input type="text" class="form-control" id="valor" placeholder="Valor">            
+            </div> 
+            <div class="col-4">
+                <label for="desconto">Desconto</label>
+                <input type="text" class="form-control" id="desconto" placeholder="Desconto">            
+            </div>
+            <div class="col-4">
+                <label for="juros">Juros</label>
+                <input type="text" class="form-control" id="juros" placeholder="Juros">            
+            </div>
+        </div>
+        <p id="resultado"></p>
+    </div>
+</body>
+<script>
+
+    var resultado = document.getElementById("resultado")
+    var formDesconto = document.getElementById("desconto")
+    var formEmpresa = document.getElementById("empresa")
+    var formNossoNumero = document.getElementById("nossoNumero")
+    var formValor = document.getElementById("valor");
+    var formJuros = document.getElementById("juros")
+
+    function mostrarResultado() {
+        let remessa = document.getElementById("remessa").value
+        var primeiraLinha = remessa.substring(0, 400);
+        var segundaLinha = remessa.substring(400, 799);
+        var terceiraLinha = remessa.substring(800, 1199);
+
+        var nomeEmpresa = primeiraLinha.substring(46,76);
+        var nossoNumero = segundaLinha.substring(38,63)
+        var valor = formatNumber(segundaLinha.substring(254,267))
+        var desconto = formatNumber(segundaLinha.substring(241,254))
+        var juros = formatNumber(segundaLinha.substring(267,280))
+
+        
+        formEmpresa.value = nomeEmpresa;
+        formNossoNumero.value = nossoNumero;
+        formValor.value = valor;
+        formDesconto.value = desconto;
+        formJuros.value = juros;
+        
+        
+
+        //resultado.innerText = `Remessa: ${primeiraLinha}`;
+    }
+
+    function formatNumber(number) {
+        //console.log("numero completo: " + number)
+        //console.log("numero decimal: " + number.substring(10,13)/100)
+        //console.log("numero inteiro: " + number.substring(0,10))
+
+        var valor = Number(number.substring(0,10)) + (Number(number.substring(10,12))/100);
+        return valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+        console.log(valor)
+    }
+</script>
+
+</html>
