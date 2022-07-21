@@ -18,27 +18,34 @@
         </div>
         <h5 class="text-center pt-3">RESULTADO</h5>
         <div class="row">
-            <div class="col-6">
+            <div class="col-6 pt-3">
                 <label for="desconto">Nome da empresa</label>
                 <input type="text" class="form-control" id="empresa" maxlength="30" placeholder="Nome da empresa">            
             </div>
-            <div class="col-3">
+            <div class="col-3 pt-3">
                 <label for="nossoNumero">Identificação do boleto</label>
                 <input type="text" class="form-control" id="nossoNumero" placeholder="Identificação do boleto">            
             </div> 
-            <div class="col-3"></div>
+            <div class="col-3 pt-3">
+                <label for="dataPaga">Data paga</label>
+                <input type="date" class="form-control" id="dataPaga">            
+            </div> 
             
-            <div class="col-4">
+            <div class="col-4 pt-3">
                 <label for="valor">Valor</label>
                 <input type="text" class="form-control" id="valor" placeholder="Valor">            
             </div> 
-            <div class="col-4">
+            <div class="col-4 pt-3">
                 <label for="desconto">Desconto</label>
-                <input type="text" class="form-control" id="desconto" placeholder="Desconto">            
+                <input type="text" class="form-control" id="desconto" onchange="formatNumberForm('desconto')" placeholder="Desconto">            
             </div>
-            <div class="col-4">
+            <div class="col-4 pt-3">
                 <label for="juros">Juros</label>
                 <input type="text" class="form-control" id="juros" placeholder="Juros">            
+            </div>
+            <div class="col-6 pt-3">
+                <label for="desconto">Nome do pagante</label>
+                <input type="text" class="form-control" id="pagante" maxlength="30" placeholder="Nome do pagante">            
             </div>
         </div>
         <p id="resultado"></p>
@@ -46,45 +53,70 @@
 </body>
 <script>
 
-    var resultado = document.getElementById("resultado")
-    var formDesconto = document.getElementById("desconto")
-    var formEmpresa = document.getElementById("empresa")
-    var formNossoNumero = document.getElementById("nossoNumero")
-    var formValor = document.getElementById("valor");
-    var formJuros = document.getElementById("juros")
+    let resultado = document.getElementById("resultado")
+    let formDesconto = document.getElementById("desconto")
+    let formEmpresa = document.getElementById("empresa")
+    let formNossoNumero = document.getElementById("nossoNumero")
+    let formValor = document.getElementById("valor");
+    let formJuros = document.getElementById("juros");
+    let formDataPaga = document.getElementById("dataPaga");
+    let formPagante = document.getElementById("pagante");
 
     function mostrarResultado() {
         let remessa = document.getElementById("remessa").value
-        var primeiraLinha = remessa.substring(0, 400);
-        var segundaLinha = remessa.substring(400, 799);
-        var terceiraLinha = remessa.substring(800, 1199);
+        let primeiraLinha = remessa.substring(0, 400);
+        let segundaLinha = remessa.substring(400, 799);
+        let terceiraLinha = remessa.substring(800, 1199);
 
-        var nomeEmpresa = primeiraLinha.substring(46,76);
-        var nossoNumero = segundaLinha.substring(38,63)
-        var valor = formatNumber(segundaLinha.substring(254,267))
-        var desconto = formatNumber(segundaLinha.substring(241,254))
-        var juros = formatNumber(segundaLinha.substring(267,280))
-
+        let nomeEmpresa = primeiraLinha.substring(46,76);
+        let nossoNumero = segundaLinha.substring(38,63)
+        let valor = formatNumber(segundaLinha.substring(254,267))
+        let desconto = formatNumber(segundaLinha.substring(241,254))
+        let juros = formatNumber(segundaLinha.substring(267,280))
+        let dataPaga = formatDate(segundaLinha.substring(296,302))
+        let pagante = segundaLinha.substring(325,355);
         
+
         formEmpresa.value = nomeEmpresa;
         formNossoNumero.value = nossoNumero;
         formValor.value = valor;
         formDesconto.value = desconto;
         formJuros.value = juros;
+        formDataPaga.value = dataPaga;
+        formPagante.value = pagante;
         
         
 
-        //resultado.innerText = `Remessa: ${primeiraLinha}`;
+        
     }
 
     function formatNumber(number) {
-        //console.log("numero completo: " + number)
-        //console.log("numero decimal: " + number.substring(10,13)/100)
-        //console.log("numero inteiro: " + number.substring(0,10))
-
-        var valor = Number(number.substring(0,10)) + (Number(number.substring(10,12))/100);
+        let valor = Number(number.substring(0,10)) + (Number(number.substring(10,12))/100);
         return valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
         console.log(valor)
+    }
+
+    function formatNumberForm(identificador) {
+        
+        let form = document.getElementById(identificador);
+        let valor = Number(form.value.replace(",","."))
+        console.log(valor)
+        valor = valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+        form.value = valor;
+        
+    }
+
+    function formatDate(date){
+        var dia  = date.substring(0, 2);
+        var mes  = date.substring(2, 4);
+        var ano  = date.substring(4, 6);
+
+        return (("20"+ano) + '-' + mes + '-' + dia);
+    }
+
+
+    function modificarRemessa(){
+        
     }
 </script>
 
