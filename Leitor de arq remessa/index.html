@@ -11,8 +11,17 @@
 </head>
 
 <body>
-    <h1 class="text-center pt-3 text-uppercase">Leitor de remessa de retorno</h1>
     <div class="container">
+        <div class="row">
+            <div class="col-1 pt-3">
+                <img src="v2.png" alt="" width="110px">
+            </div>
+            <div class="col-10  pt-3 ">
+                <h1 class="text-center text-uppercase">Leitor de remessa de retorno</h1>
+            </div>
+            
+        </div>
+    
         <div class="form-group">
             <textarea class="form-control mt-4" id="remessa" rows="8" placeholder="Deposite aqui sua remessa"onkeyup="mostrarResultado()"></textarea>
         </div>
@@ -33,7 +42,7 @@
             
             <div class="col-4 pt-3">
                 <label for="valor">Valor</label>
-                <input type="text" class="form-control" id="valor" placeholder="Valor">            
+                <input type="text" class="form-control" id="valor" onchange="formatNumberForm('valor')"  placeholder="Valor">            
             </div> 
             <div class="col-4 pt-3">
                 <label for="desconto">Desconto</label>
@@ -41,11 +50,17 @@
             </div>
             <div class="col-4 pt-3">
                 <label for="juros">Juros</label>
-                <input type="text" class="form-control" id="juros" placeholder="Juros">            
+                <input type="text" class="form-control" id="juros" onchange="formatNumberForm('juros')"  placeholder="Juros">            
             </div>
             <div class="col-6 pt-3">
                 <label for="desconto">Nome do pagante</label>
                 <input type="text" class="form-control" id="pagante" maxlength="30" placeholder="Nome do pagante">            
+            </div>
+            <div class="col-6">
+                
+            </div>
+            <div class="pt-3 d-flex justify-content-center">
+                <button type="button" class="r btn btn-outline-success" onclick="gerarNovaRemessa()">Gerar nova remessa</button>
             </div>
         </div>
         <p id="resultado"></p>
@@ -65,13 +80,13 @@
     function mostrarResultado() {
         let remessa = document.getElementById("remessa").value
         let primeiraLinha = remessa.substring(0, 400);
-        let segundaLinha = remessa.substring(400, 799);
-        let terceiraLinha = remessa.substring(800, 1199);
+        let segundaLinha = remessa.substring(400, 801);
+        let terceiraLinha = remessa.substring(801, 1300);
 
         let nomeEmpresa = primeiraLinha.substring(46,76);
         let nossoNumero = segundaLinha.substring(38,63)
-        let valor = formatNumber(segundaLinha.substring(254,267))
         let desconto = formatNumber(segundaLinha.substring(241,254))
+        let valor = formatNumber(segundaLinha.substring(254,267))
         let juros = formatNumber(segundaLinha.substring(267,280))
         let dataPaga = formatDate(segundaLinha.substring(296,302))
         let pagante = segundaLinha.substring(325,355);
@@ -88,6 +103,35 @@
         
 
         
+    }
+
+    function gerarNovaRemessa(){
+        let remessaInput = document.getElementById("remessa")
+        let remessa = remessaInput.value
+        let primeiraLinha = fprimeiraLinha(remessa.substring(0, 400));
+        let segundaLinha = fsegundaLinha(remessa.substring(400, 801));
+        let terceiraLinha = remessa.substring(801, 1300);
+
+        
+       
+
+        let result = primeiraLinha + segundaLinha + terceiraLinha;
+        /*console.log("primeira linha remessa: " + remessa.substring(0, 400).length)
+        console.log("primeira linha: " + primeiraLinha.length)
+        console.log("segunda linha remessa: " + remessa.substring(400, 800).length)
+        console.log("segunda linha: " + segundaLinha.length)
+        console.log("terceira linha: " + remessa.substring(800, 1222).length)*/
+        console.log(remessa.length)
+        console.log(result.length)
+
+        console.log("primeira linha remessa: " + remessa.substring(0, 400))
+        console.log("primeira linha: " + primeiraLinha)
+        console.log("segunda linha remessa: " + remessa.substring(400, 801))
+        console.log("segunda linha: " + segundaLinha)
+        console.log("terceira linha: " + remessa.substring(801, 1300))
+
+        remessaInput.value = result;
+
     }
 
     function formatNumber(number) {
@@ -114,9 +158,43 @@
         return (("20"+ano) + '-' + mes + '-' + dia);
     }
 
+    function formatDateRemessa(date){
+        var dia  = date.substring(8, 10);
+        var mes  = date.substring(5, 7);
+        var ano  = date.substring(2, 4);
 
-    function modificarRemessa(){
-        
+        return dia+mes+ano;
+    }
+    
+    function formatNumeroRemessa(number){
+        console.log("numero sem format: " +number);
+        number = number.replace(/[^0-9]/g,'');
+        console.log("apenas numero: " +number);
+        let zeros="0000000000000";
+        let i = number.length;
+        console.log("quantidade de caractere: " + i);
+        number = zeros.substring(0,13-i) + number 
+        console.log("numeros com zeros: "+number);
+        console.log("quantidade de caractere do num: " + number.length);
+        return number;
+    }
+
+    function fprimeiraLinha(primeiraLinha){
+        let nomeEmpresa = formEmpresa.value
+        return primeiraLinha.substring(0,46) + nomeEmpresa + primeiraLinha.substring(76,400);
+    }
+
+    function fsegundaLinha(segundaLinha){
+        let nossoNumero = formNossoNumero.value;
+        let desconto = formatNumeroRemessa(formDesconto.value);
+        let valor = formatNumeroRemessa(formValor.value);
+        let juros = formatNumeroRemessa(formJuros.value);
+        let dataPaga = formatDateRemessa(formDataPaga.value)
+        let pagante = formPagante.value;
+
+        return segundaLinha.substring(0,38)+nossoNumero+segundaLinha.substring(63,241)+desconto+valor+juros+segundaLinha.substring(280,296)+
+        dataPaga+segundaLinha.substring(302,325)+pagante+
+        segundaLinha.substring(355,401);
     }
 </script>
 
