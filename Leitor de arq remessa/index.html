@@ -78,6 +78,7 @@
     let formPagante = document.getElementById("pagante");
 
     function mostrarResultado() {
+
         let remessa = document.getElementById("remessa").value
         let primeiraLinha = remessa.substring(0, 400);
         let segundaLinha = remessa.substring(400, 801);
@@ -100,9 +101,7 @@
         formDataPaga.value = dataPaga;
         formPagante.value = pagante;
         
-        
-
-        
+ 
     }
 
     function gerarNovaRemessa(){
@@ -112,39 +111,20 @@
         let segundaLinha = fsegundaLinha(remessa.substring(400, 801));
         let terceiraLinha = remessa.substring(801, 1300);
 
-        
-       
-
         let result = primeiraLinha + segundaLinha + terceiraLinha;
-        /*console.log("primeira linha remessa: " + remessa.substring(0, 400).length)
-        console.log("primeira linha: " + primeiraLinha.length)
-        console.log("segunda linha remessa: " + remessa.substring(400, 800).length)
-        console.log("segunda linha: " + segundaLinha.length)
-        console.log("terceira linha: " + remessa.substring(800, 1222).length)*/
-        console.log(remessa.length)
-        console.log(result.length)
-
-        console.log("primeira linha remessa: " + remessa.substring(0, 400))
-        console.log("primeira linha: " + primeiraLinha)
-        console.log("segunda linha remessa: " + remessa.substring(400, 801))
-        console.log("segunda linha: " + segundaLinha)
-        console.log("terceira linha: " + remessa.substring(801, 1300))
-
         remessaInput.value = result;
 
     }
 
     function formatNumber(number) {
-        let valor = Number(number.substring(0,10)) + (Number(number.substring(10,12))/100);
+        let valor = Number(number.substring(0,11)) + (Number(number.substring(11,13))/100);
         return valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
-        console.log(valor)
     }
 
     function formatNumberForm(identificador) {
         
         let form = document.getElementById(identificador);
         let valor = Number(form.value.replace(",","."))
-        console.log(valor)
         valor = valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
         form.value = valor;
         
@@ -167,15 +147,11 @@
     }
     
     function formatNumeroRemessa(number){
-        console.log("numero sem format: " +number);
+
         number = number.replace(/[^0-9]/g,'');
-        console.log("apenas numero: " +number);
-        let zeros="0000000000000";
+        let zeros="00000000000000";
         let i = number.length;
-        console.log("quantidade de caractere: " + i);
         number = zeros.substring(0,13-i) + number 
-        console.log("numeros com zeros: "+number);
-        console.log("quantidade de caractere do num: " + number.length);
         return number;
     }
 
@@ -185,16 +161,19 @@
     }
 
     function fsegundaLinha(segundaLinha){
+
         let nossoNumero = formNossoNumero.value;
+
         let desconto = formatNumeroRemessa(formDesconto.value);
         let valor = formatNumeroRemessa(formValor.value);
         let juros = formatNumeroRemessa(formJuros.value);
         let dataPaga = formatDateRemessa(formDataPaga.value)
         let pagante = formPagante.value;
 
-        return segundaLinha.substring(0,38)+nossoNumero+segundaLinha.substring(63,241)+desconto+valor+juros+segundaLinha.substring(280,296)+
+        return segundaLinha.substring(0,38) +nossoNumero+ segundaLinha.substring(63,241) + desconto + valor + juros + segundaLinha.substring(280,296)+
         dataPaga+segundaLinha.substring(302,325)+pagante+
         segundaLinha.substring(355,401);
+        
     }
 </script>
 
